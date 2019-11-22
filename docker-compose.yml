@@ -18,7 +18,7 @@ services:
       depends_on:
          - elasticsearch
          - rabbitmq
-      image: docker.elastic.co/logstash/logstash-oss:6.2.4
+      image: docker.elastic.co/logstash/logstash:7.4.2
       container_name: logstash_container
       user: logstash
       restart: always
@@ -29,7 +29,7 @@ services:
       networks:
          - elk-net
    elasticsearch:
-      image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
+      image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
       container_name: elasticsearch_container
       user: elasticsearch
       restart: always
@@ -52,7 +52,7 @@ services:
    kibana:
       depends_on:
          - elasticsearch
-      image: pegasus/panorama-kibana:latest
+      image: docker.elastic.co/kibana/kibana:7.4.2
       container_name: kibana-container
       user: kibana
       restart: always
