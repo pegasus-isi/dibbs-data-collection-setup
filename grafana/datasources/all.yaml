@@ -1,0 +1,29 @@
+apiVersion: 1
+
+datasources:
+  - name: PanoramaElasticStampede
+    type: elasticsearch
+    access: proxy
+    database: "panorama_stampede"
+    url: http://panorama-elasticsearch:9200
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: 60
+  
+  - name: PanoramaElasticKickstart
+    type: elasticsearch
+    access: proxy
+    database: "panorama_kickstart"
+    url: http://panorama-elasticsearch:9200
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: 60
+  
+  - name: PanoramaElasticTransfer
+    type: elasticsearch
+    access: proxy
+    database: "panorama_transfer"
+    url: http://panorama-elasticsearch:9200
+    jsonData:
+      timeField: "@timestamp"
+      esVersion: 60

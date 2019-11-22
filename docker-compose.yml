@@ -1,0 +1,88 @@
+version: "3.5"
+services:
+   rabbitmq:
+      image: rabbitmq:3.7-management
+      container_name: panorama-rabbitmq
+#      user: rabbitmq
+      restart: always
+      ports:
+         - 5672:5672
+         - 15672:15672
+      volumes:
+         - ./rabbitmq/data:/var/lib/rabbitmq:rw
+         - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+         - ./rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
+      networks:
+         - panorama_net
+   logstash:
+      depends_on:
+         - elasticsearch
+         - rabbitmq
+      image: docker.elastic.co/logstash/logstash-oss:6.2.4
+      container_name: panorama-logstash
+      user: logstash
+      restart: always
+      volumes:
+         - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+      ports:
+         - 9600:9600
+      networks:
+         - panorama_net
+   elasticsearch:
+      image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
+      container_name: panorama-elasticsearch
+      user: elasticsearch
+      restart: always
+      environment:
+         - discovery.type=single-node
+         - cluster.name=panorama-cluster
+         - node.name=panorama-1
+         - bootstrap.memory_lock=true
+         - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      ulimits:
+         memlock:
+            soft: -1
+            hard: -1
+      volumes:
+         - ./elasticsearch/data:/usr/share/elasticsearch/data:rw
+      ports:
+         - 9200:9200
+      networks:
+         - panorama_net
+   kibana:
+      depends_on:
+         - elasticsearch
+      image: pegasus/panorama-kibana:latest
+      container_name: panorama-kibana
+      user: kibana
+      restart: always
+      environment:
+         - ELASTICSEARCH_URL=http://panorama-elasticsearch:9200
+      volumes:
+         - ./kibana/data:/usr/share/kibana/data:rw
+      ports:
+         - 5601:5601
+      networks:
+         - panorama_net
+   grafana:
+      depends_on:
+         - elasticsearch
+      image: grafana/grafana:latest
+      container_name: panorama-grafana
+      user: grafana
+      restart: always
+      environment:
+         - GF_SECURITY_ADMIN_PASSWORD=panorama
+         - GF_INSTALL_PLUGINS=grafana-piechart-panel,farski-blendstat-panel,mtanda-histogram-panel,blackmirror1-singlestat-math-panel
+      volumes:
+         - ./grafana/data:/var/lib/grafana:rw
+         - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:rw
+         - ./grafana/datasources:/etc/grafana/provisioning/datasources:rw
+      ports:
+         - 3000:3000
+      networks:
+         - panorama_net
+networks:
+   panorama_net:
+      name: panorama_net
+      driver: bridge
