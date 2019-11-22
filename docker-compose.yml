@@ -2,7 +2,7 @@ version: "3.5"
 services:
    rabbitmq:
       image: rabbitmq:3.7-management
-      container_name: panorama-rabbitmq
+      container_name: rabbitmq_container
 #      user: rabbitmq
       restart: always
       ports:
@@ -13,13 +13,13 @@ services:
          - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
          - ./rabbitmq/rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
       networks:
-         - panorama_net
+         - elk-net
    logstash:
       depends_on:
          - elasticsearch
          - rabbitmq
       image: docker.elastic.co/logstash/logstash-oss:6.2.4
-      container_name: panorama-logstash
+      container_name: logstash_container
       user: logstash
       restart: always
       volumes:
@@ -27,16 +27,16 @@ services:
       ports:
          - 9600:9600
       networks:
-         - panorama_net
+         - elk-net
    elasticsearch:
       image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
-      container_name: panorama-elasticsearch
+      container_name: elasticsearch_container
       user: elasticsearch
       restart: always
       environment:
          - discovery.type=single-node
-         - cluster.name=panorama-cluster
-         - node.name=panorama-1
+         - cluster.name=elasticsearch-cluster
+         - node.name=elasticsearch-node-1
          - bootstrap.memory_lock=true
          - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       ulimits:
@@ -48,31 +48,31 @@ services:
       ports:
          - 9200:9200
       networks:
-         - panorama_net
+         - elk-net
    kibana:
       depends_on:
          - elasticsearch
       image: pegasus/panorama-kibana:latest
-      container_name: panorama-kibana
+      container_name: kibana-container
       user: kibana
       restart: always
       environment:
-         - ELASTICSEARCH_URL=http://panorama-elasticsearch:9200
+         - ELASTICSEARCH_URL=http://elasticsearch-container:9200
       volumes:
          - ./kibana/data:/usr/share/kibana/data:rw
       ports:
          - 5601:5601
       networks:
-         - panorama_net
+         - elk-net
    grafana:
       depends_on:
          - elasticsearch
       image: grafana/grafana:latest
-      container_name: panorama-grafana
+      container_name: grafana-container
       user: grafana
       restart: always
       environment:
-         - GF_SECURITY_ADMIN_PASSWORD=panorama
+         - GF_SECURITY_ADMIN_PASSWORD=dibbs
          - GF_INSTALL_PLUGINS=grafana-piechart-panel,farski-blendstat-panel,mtanda-histogram-panel,blackmirror1-singlestat-math-panel
       volumes:
          - ./grafana/data:/var/lib/grafana:rw
@@ -81,8 +81,8 @@ services:
       ports:
          - 3000:3000
       networks:
-         - panorama_net
+         - elk-net
 networks:
-   panorama_net:
-      name: panorama_net
+   elk-net:
+      name: elk-net
       driver: bridge
