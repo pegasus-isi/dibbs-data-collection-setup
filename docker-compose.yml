@@ -18,12 +18,13 @@ services:
       depends_on:
          - elasticsearch
          - rabbitmq
-      image: docker.elastic.co/logstash/logstash:7.4.2
+      image: docker.elastic.co/logstash/logstash-oss:6.2.4
       container_name: logstash_container
       user: logstash
       restart: always
       volumes:
          - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+         - ./logstash/logstash.conf:/usr/share/logstash/templates/workflow-events.json:ro
       ports:
          - 9600:9600
       networks:

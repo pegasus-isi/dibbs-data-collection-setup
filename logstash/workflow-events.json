@@ -1,0 +1,31 @@
+{
+  "template" : "workflow-events-*",
+  "settings" : {
+    "index.refresh_interval" : "5s",
+    "number_of_shards" : 5,
+    "number_of_replicas" : 1
+  },
+  "mappings" : {
+    "_default_" : {
+      "dynamic_templates" : [
+      {
+        "string_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "string",
+          "mapping" : {
+            "type" : "text", "norms" : false,
+            "fields" : {
+              "keyword" : { "type": "keyword", "ignore_above": 512 }
+            }
+          }
+        }
+      } ],
+      "properties" : {
+        "@timestamp": { "type": "date" },
+        "@version": { "type": "keyword" },
+        "dur": { "type": "float" },
+        "remote_cpu_time": { "type": "float" }
+      }
+    }
+  }
+}
