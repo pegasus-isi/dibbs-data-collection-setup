@@ -2,7 +2,7 @@ version: "3.5"
 services:
    rabbitmq:
       image: rabbitmq:3.7-management
-      container_name: rabbitmq_container
+      container_name: rabbitmq-container
 #      user: rabbitmq
       restart: always
       ports:
@@ -19,7 +19,7 @@ services:
          - elasticsearch
          - rabbitmq
       image: docker.elastic.co/logstash/logstash-oss:6.2.4
-      container_name: logstash_container
+      container_name: logstash-container
       user: logstash
       restart: always
       volumes:
@@ -31,7 +31,7 @@ services:
          - elk-net
    elasticsearch:
       image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
-      container_name: elasticsearch_container
+      container_name: elasticsearch-container
       user: elasticsearch
       restart: always
       environment:
@@ -58,7 +58,7 @@ services:
       user: kibana
       restart: always
       environment:
-         - ELASTICSEARCH_URL=http://elasticsearch-container:9200
+         - ELASTICSEARCH_URL=http://elasticsearch-container:9200 
       volumes:
          - ./kibana/data:/usr/share/kibana/data:rw
       ports:
