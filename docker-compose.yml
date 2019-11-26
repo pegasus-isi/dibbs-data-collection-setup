@@ -18,7 +18,8 @@ services:
       depends_on:
          - elasticsearch
          - rabbitmq
-      image: docker.elastic.co/logstash/logstash-oss:6.2.4
+      #image: docker.elastic.co/logstash/logstash-oss:6.2.4
+      image: docker.elastic.co/logstash/logstash:6.8.5
       container_name: logstash-container
       user: logstash
       restart: always
