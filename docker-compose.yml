@@ -30,7 +30,7 @@ services:
       networks:
          - elk-net
    elasticsearch:
-      image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+      image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
       container_name: elasticsearch-container
       user: elasticsearch
       restart: always
@@ -53,7 +53,7 @@ services:
    kibana:
       depends_on:
          - elasticsearch
-      image: docker.elastic.co/kibana/kibana:7.4.2
+      image: docker.elastic.co/kibana/kibana-oss:6.2.4
       container_name: kibana-container
       user: kibana
       restart: always
