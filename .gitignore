@@ -1,0 +1,5 @@
+# data directory content
+elasticsearch/data/*
+grafana/data/*
+kibana/data/*
+rabbitmq/data/*
