@@ -70,7 +70,7 @@
   "policies": [],
   "queues": [
     {
-      "name": "workflows",
+      "name": "workflows-es",
       "vhost": "prod",
       "durable": true,
       "auto_delete": false,
@@ -89,14 +89,6 @@
     }
   ],
   "bindings": [
-    {
-      "source": "workflows",
-      "vhost": "prod",
-      "destination": "workflows",
-      "destination_type": "queue",
-      "routing_key": "stampede.#",
-      "arguments": {}
-    },
     {
       "source": "workflows",
       "vhost": "prod",
