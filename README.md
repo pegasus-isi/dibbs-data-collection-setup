@@ -2,6 +2,8 @@
 
 ## Overview
 
+![](figures/components.svg)
+
 This repository contains everything necessary to setup the data collection 
 pipeline used to collect pegasus composite events and visualize them
 on an interactive dashboard. This includes 
