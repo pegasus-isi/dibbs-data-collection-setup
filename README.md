@@ -133,8 +133,6 @@ Password: dibbs
 
 Under `Recently viewed dashboards` select `Main` to view the dashboard.
 
-TODO: ^ change that dashboard to be the default on the grafana homepage ...
-
 ## Monitoring Incoming Messages with RabbitMQ
 RabbitMQ has a web interface that shows when messages are received,
 how many messages are queued up, etc. 
