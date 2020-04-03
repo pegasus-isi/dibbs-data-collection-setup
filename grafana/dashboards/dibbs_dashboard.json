@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1585862570184,
+  "iteration": 1585881776868,
   "links": [],
   "panels": [
     {
@@ -1924,7 +1924,6 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
-          "selected": true,
           "text": "auto",
           "value": "$__auto_interval_bin_size"
         },
@@ -1996,11 +1995,9 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
+          "selected": false,
           "text": "All",
-          "value": [
-            "$__all"
-          ]
+          "value": "$__all"
         },
         "datasource": "Elasticsearch",
         "definition": "{\"find\": \"terms\", \"field\": \"pegasus_version.keyword\", \"query\": \"*\"}",
@@ -2051,11 +2048,8 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
           "text": "All",
-          "value": [
-            "$__all"
-          ]
+          "value": "$__all"
         },
         "datasource": "Elasticsearch",
         "definition": "{\"find\": \"terms\", \"field\": \"user.keyword\", \"query\": \"submit_hostname:$submit_host AND pegasus_version:$pegasus_version\"}",
@@ -2160,8 +2154,8 @@
     ]
   },
   "time": {
-    "from": "2019-12-01T00:00:00.000Z",
-    "to": "2019-12-31T23:59:00.000Z"
+    "from": "now-30m",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -2191,5 +2185,5 @@
   "timezone": "",
   "title": "Main",
   "uid": "vY-N96jmz",
-  "version": 52
+  "version": 53
 }
