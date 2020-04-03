@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1574869794965,
+  "iteration": 1585862570184,
   "links": [],
   "panels": [
     {
@@ -292,7 +292,7 @@
               "field": "@timestamp",
               "id": "2",
               "settings": {
-                "interval": "1y",
+                "interval": "3650d",
                 "min_doc_count": 0,
                 "trimEdges": 0
               },
@@ -301,10 +301,12 @@
           ],
           "metrics": [
             {
-              "field": "xwf_id.keyword",
+              "field": "root_xwf_id.keyword",
               "id": "1",
               "meta": {},
-              "settings": {},
+              "settings": {
+                "precision_threshold": 40000
+              },
               "type": "cardinality"
             }
           ],
@@ -781,6 +783,7 @@
         "label": "Others",
         "threshold": 0
       },
+      "decimals": null,
       "description": "The different types of CPUs used to run workflow jobs. ",
       "fontSize": "80%",
       "format": "short",
@@ -793,6 +796,7 @@
       "id": 21,
       "interval": null,
       "legend": {
+        "header": "total jobs",
         "percentage": true,
         "show": true,
         "sideWidth": 0,
@@ -851,6 +855,576 @@
     },
     {
       "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 27,
+      "interval": "",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/\\d*/",
+          "color": "#96D98D"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "local_dur",
+              "id": "3",
+              "settings": {
+                "interval": 400,
+                "min_doc_count": 1
+              },
+              "type": "histogram"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "$bin_size",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "submit_hostname:$submit_host AND user:$user AND pegasus_version:$pegasus_version AND submit_hostname:$submit_host AND user:$user AND root_xwf_id:$root_workflow_id AND submit_dir:$submit_directory AND dax:$dax_label",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Job Duration Distribution",
+      "tooltip": {
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "series",
+        "name": null,
+        "show": false,
+        "values": [
+          "total"
+        ]
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Frequency",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "breakPoint": "50%",
+      "cacheTimeout": null,
+      "combine": {
+        "label": "Others",
+        "threshold": 0
+      },
+      "decimals": null,
+      "description": "The different types of CPUs used to run workflow jobs. ",
+      "fontSize": "80%",
+      "format": "short",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 34,
+      "interval": null,
+      "legend": {
+        "header": "CPU walltime in seconds",
+        "percentage": true,
+        "show": true,
+        "sideWidth": 0,
+        "values": true
+      },
+      "legendType": "Right side",
+      "links": [],
+      "maxDataPoints": 3,
+      "nullPointMode": "connected",
+      "options": {},
+      "pieType": "pie",
+      "strokeWidth": "1",
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "cpu_model.keyword",
+              "id": "3",
+              "settings": {
+                "min_doc_count": 1,
+                "order": "desc",
+                "orderBy": "_count",
+                "size": "0"
+              },
+              "type": "terms"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "$bin_size",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "local_dur",
+              "id": "1",
+              "meta": {},
+              "settings": {},
+              "type": "sum"
+            }
+          ],
+          "query": "submit_hostname:$submit_host AND user:$user AND pegasus_version:$pegasus_version AND submit_hostname:$submit_host AND user:$user AND root_xwf_id:$root_workflow_id AND submit_dir:$submit_directory AND dax:$dax_label",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Walltime Per CPU Model",
+      "type": "grafana-piechart-panel",
+      "valueName": "total"
+    },
+    {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "id": 31,
+      "interval": "",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "hideZero": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/\\d+/",
+          "color": "#CA95E5"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "metadata_filter_rate_per_core",
+              "id": "3",
+              "settings": {
+                "interval": 0.5,
+                "min_doc_count": 1
+              },
+              "type": "histogram"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "30d",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "submit_hostname:$submit_host AND user:$user AND pegasus_version:$pegasus_version AND submit_hostname:$submit_host AND user:$user AND root_xwf_id:$root_workflow_id AND submit_dir:$submit_directory AND dax:$dax_label",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Filter Rate Per Core",
+      "tooltip": {
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "series",
+        "name": null,
+        "show": true,
+        "values": [
+          "total"
+        ]
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Frequency",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "id": 33,
+      "interval": "",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/\\d+/",
+          "color": "#FF7383"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "metadata_setup_time_fraction",
+              "id": "3",
+              "settings": {
+                "interval": 0.05,
+                "min_doc_count": 1
+              },
+              "type": "histogram"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "30d",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "submit_hostname:$submit_host AND user:$user AND pegasus_version:$pegasus_version AND submit_hostname:$submit_host AND user:$user AND root_xwf_id:$root_workflow_id AND submit_dir:$submit_directory AND dax:$dax_label",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Fraction of Time Doing Setup Operations",
+      "tooltip": {
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "series",
+        "name": null,
+        "show": true,
+        "values": [
+          "total"
+        ]
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Frequency",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 28
+      },
+      "id": 29,
+      "interval": "",
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": false,
+        "total": false,
+        "values": false
+      },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "/\\d+/",
+          "color": "#8AB8FF"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "bucketAggs": [
+            {
+              "fake": true,
+              "field": "metadata_templates_per_core",
+              "id": "3",
+              "settings": {
+                "interval": 200,
+                "min_doc_count": 1
+              },
+              "type": "histogram"
+            },
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "30d",
+                "min_doc_count": 0,
+                "trimEdges": 0
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "metrics": [
+            {
+              "field": "select field",
+              "id": "1",
+              "type": "count"
+            }
+          ],
+          "query": "submit_hostname:$submit_host AND user:$user AND pegasus_version:$pegasus_version AND submit_hostname:$submit_host AND user:$user AND root_xwf_id:$root_workflow_id AND submit_dir:$submit_directory AND dax:$dax_label",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Templates Per Core",
+      "tooltip": {
+        "shared": false,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "series",
+        "name": null,
+        "show": true,
+        "values": [
+          "total"
+        ]
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Frequency",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -860,7 +1434,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 37
       },
       "id": 16,
       "interval": "",
@@ -1003,7 +1577,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 14
+        "y": 37
       },
       "id": 15,
       "legend": {
@@ -1111,7 +1685,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 43
       },
       "id": 17,
       "legend": {
@@ -1218,7 +1792,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 50
       },
       "id": 19,
       "links": [],
@@ -1273,7 +1847,7 @@
           "bucketAggs": [
             {
               "fake": true,
-              "field": "submit__hostname.keyword",
+              "field": "submit_hostname.keyword",
               "id": "4",
               "settings": {
                 "min_doc_count": 1,
@@ -1297,7 +1871,7 @@
             },
             {
               "fake": true,
-              "field": "submit__dir.keyword",
+              "field": "submit_dir.keyword",
               "id": "3",
               "settings": {
                 "min_doc_count": 1,
@@ -1327,7 +1901,7 @@
               "type": "count"
             }
           ],
-          "query": "int_error_count:>0 AND (submit_hostname:$submit_host OR submit__hostname:$submit_host) AND user:$user AND pegasus_version:$pegasus_version AND root_xwf_id:$root_workflow_id AND submit_dir:$submit_directory",
+          "query": "int_error_count:>0 AND  user:$user AND pegasus_version:$pegasus_version AND (submit_hostname:$submit_host OR submit__hostname:$submit_host) AND  root_xwf_id:$root_workflow_id AND submit_dir:$submit_directory",
           "refId": "A",
           "timeField": "@timestamp"
         }
@@ -1350,6 +1924,7 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
+          "selected": true,
           "text": "auto",
           "value": "$__auto_interval_bin_size"
         },
@@ -1421,9 +1996,10 @@
       {
         "allValue": null,
         "current": {
-          "text": "4.9.3dev",
+          "tags": [],
+          "text": "All",
           "value": [
-            "4.9.3dev"
+            "$__all"
           ]
         },
         "datasource": "Elasticsearch",
@@ -1475,9 +2051,11 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "tags": [],
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "Elasticsearch",
         "definition": "{\"find\": \"terms\", \"field\": \"user.keyword\", \"query\": \"submit_hostname:$submit_host AND pegasus_version:$pegasus_version\"}",
@@ -1502,7 +2080,9 @@
         "allValue": null,
         "current": {
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "Elasticsearch",
         "definition": "{\"find\": \"terms\", \"field\": \"root_xwf_id.keyword\", \"query\":\"pegasus_version:$pegasus_version AND submit_hostname:$submit_host AND user:$user\"}",
@@ -1527,7 +2107,9 @@
         "allValue": null,
         "current": {
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "Elasticsearch",
         "definition": "{\"find\": \"terms\", \"field\": \"submit_dir.keyword\", \"query\":\"pegasus_version:$pegasus_version AND submit_hostname:$submit_host AND user:$user AND root_xwf_id:$root_workflow_id\"}",
@@ -1552,7 +2134,9 @@
         "allValue": null,
         "current": {
           "text": "All",
-          "value": "$__all"
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "Elasticsearch",
         "definition": "{\"find\": \"terms\", \"field\": \"dax.keyword\", \"query\": \"submit_dir.keyword:$submit_directory AND root_xwf_id:$root_workflow_id AND user:$user AND submit_hostname:$submit_host AND pegasus_version:$pegasus_version\"}",
@@ -1576,8 +2160,8 @@
     ]
   },
   "time": {
-    "from": "now-30d",
-    "to": "now"
+    "from": "2019-12-01T00:00:00.000Z",
+    "to": "2019-12-31T23:59:00.000Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -1607,5 +2191,5 @@
   "timezone": "",
   "title": "Main",
   "uid": "vY-N96jmz",
-  "version": 36
+  "version": 52
 }
